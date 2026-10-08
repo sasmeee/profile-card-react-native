@@ -1,98 +1,142 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
+import {
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+export default function Index() {
+  const [points, setPoints] = useState(0);
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#000" />
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>My Profile</Text>
+      </View>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <View style={styles.avatarSection}>
+        <View style={styles.avatarCircle}>
+          <Ionicons name="person-circle" size={104} color="#999" />
+          <View style={styles.badge}>
+            <Ionicons name="checkmark" size={20} color="#00e000" />
+          </View>
+        </View>
+      </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      <View style={styles.divider} />
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+      <View style={styles.details}>
+        <Text style={styles.label}>Name</Text>
+        <Text style={styles.value}>Sasmitha Ashinsana</Text>
+
+        <Text style={styles.label}>Email</Text>
+        <View style={styles.row}>
+          <Ionicons name="mail" size={16} color="#000" />
+          <Text style={[styles.value, styles.rowText]}>
+            psaperera@students.nsbm.ac.lk
+          </Text>
+        </View>
+
+        <Text style={styles.label}>Points</Text>
+        <View style={styles.row}>
+          <Ionicons name="star" size={16} color="#000" />
+          <Text style={[styles.value, styles.rowText]}>{points}</Text>
+        </View>
+      </View>
+
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => setPoints(points + 1)}
+      >
+        <Ionicons name="add" size={26} color="#fff" />
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    backgroundColor: "#f5f5f5",
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+  header: {
+    backgroundColor: "#000",
+    paddingTop: 48,
+    paddingBottom: 16,
+    alignItems: "center",
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+  headerTitle: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "600",
   },
-  title: {
-    textAlign: 'center',
+  avatarSection: {
+    alignItems: "center",
+    marginTop: 24,
+    marginBottom: 24,
   },
-  code: {
-    textTransform: 'uppercase',
+  avatarCircle: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 3,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  avatar: {
+    width: 104,
+    height: 104,
+    borderRadius: 52,
+  },
+  badge: {
+    position: "absolute",
+    right: 4,
+    bottom: 4,
+  },
+  divider: {
+    height: 1.5,
+    backgroundColor: "#000",
+    marginHorizontal: 20,
+  },
+  details: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#000",
+    marginTop: 14,
+  },
+  value: {
+    fontSize: 14,
+    color: "#333",
+    marginTop: 4,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4,
+  },
+  rowText: {
+    marginTop: 0,
+    marginLeft: 8,
+  },
+  fab: {
+    position: "absolute",
+    right: 20,
+    bottom: 30,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
   },
 });
